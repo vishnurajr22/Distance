@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Distance</string>
+    <string name="add_stops">Add Stops</string>
+    <string name="home">Home</string>
+    <string name="signup_text">Welcome back.</string>
+
+</resources>
