@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="false" >
+    <item android:state_pressed="true" >
         <shape>
             <solid
 
@@ -15,7 +15,7 @@
                 android:bottom="10dp" />
         </shape>
     </item>
-    <item android:state_pressed="true">
+    <item>
         <shape>
 
             <stroke

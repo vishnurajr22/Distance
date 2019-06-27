@@ -54,9 +54,10 @@
             android:layout_marginTop="187dp"
             android:layout_marginEnd="44dp"
             android:layout_marginBottom="144dp"
-            android:background="@drawable/button_login"
+            android:background="@drawable/login_btn"
             android:text="click to login"
             android:textAllCaps="false"
+            android:transitionName="btn"
             />
 
         <TextView
@@ -163,6 +164,7 @@
             android:layout_marginBottom="99dp"
             android:gravity="center|end"
             android:text="Sign Up"
+            android:transitionName="sign_up_tr"
             android:textColor="@color/colorPrimaryDark"/>
 
 

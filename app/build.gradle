@@ -46,5 +46,11 @@ dependencies {
     implementation 'com.android.support:design:24.1.1'
     //cat loading progressbar
     implementation 'com.roger.catloadinglibrary:catloadinglibrary:1.0.4'
+    //loading anim
+    implementation 'com.wang.avi:library:2.1.3'
+    //volley
+    implementation 'com.android.volley:volley:1.1.1'
+    //loader
+    implementation 'com.wang.avi:library:2.1.3'
 
 }

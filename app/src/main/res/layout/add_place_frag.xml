@@ -1,0 +1,118 @@
+<LinearLayout android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:weightSum="5"
+    >
+<LinearLayout
+
+    android:layout_weight="1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <ImageView
+        android:layout_marginTop="9dp"
+        android:id="@+id/img_view"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:background="@drawable/ic_girl"
+        />
+    <TextView
+        android:id="@+id/user_name1"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="User_name"
+        android:layout_marginTop="48dp"/>
+</LinearLayout>
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_marginTop="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:fontFamily="@font/pacifico"
+            android:textSize="20sp"
+            android:layout_marginLeft="9dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+
+            android:text="Routes" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <androidx.recyclerview.widget.RecyclerView
+                android:padding="5dp"
+                android:id="@+id/route_list"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+               />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <com.wang.avi.AVLoadingIndicatorView
+
+                android:id="@+id/avi"
+                style="@style/AVLoadingIndicatorView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                app:indicatorColor="#DDF74619"
+                app:indicatorName="LineScaleIndicator" />
+        </LinearLayout>
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_marginTop="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="bottom"
+        android:orientation="horizontal"
+
+        android:paddingBottom="20dp"
+        android:weightSum="2">
+
+        <Button
+
+            android:id="@+id/addnewstops"
+            android:layout_width="166dp"
+            android:layout_height="137dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/add_bus_button"
+            android:fontFamily="@font/coiny"
+            android:text="Add Route"
+             />
+
+        <Button
+            android:id="@+id/addnewbus"
+            android:layout_width="166dp"
+            android:text="Add Bus"
+            android:layout_height="137dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/add_route_button"
+            android:fontFamily="@font/coiny"
+             />
+    </LinearLayout>
+
+
+</LinearLayout>

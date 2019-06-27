@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,14 +22,16 @@ import com.app.distance.AddStops.AddStopsFragment;
 import com.app.distance.R;
 import com.google.firebase.auth.FirebaseAuth;
 
+
 public class MainActivity extends AppCompatActivity {
     Button placebutton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        String value = getIntent().getExtras().getString("username");
 
-        initViews();
+        //initViews();
         //starting activity with AddplaceFragment
         loadFragment(new AddStopsFragment());
 
@@ -55,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void initViews() {
         //nav bar
-        BottomNavigationView bottomNavigationView=findViewById(R.id.navbar);
-        bottomNavigationView.setOnNavigationItemSelectedListener(navListner);
+//        BottomNavigationView bottomNavigationView=findViewById(R.id.navbar);
+//        bottomNavigationView.setOnNavigationItemSelectedListener(navListner);
 
     }
 
@@ -69,21 +72,28 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener navListner=
-            new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+//    private BottomNavigationView.OnNavigationItemSelectedListener navListner=
+//            new BottomNavigationView.OnNavigationItemSelectedListener() {
+//                @Override
+//                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+//
+//                    switch (menuItem.getItemId()){
+//                        case R.id.map:
+//                            loadFragment(new AddStopsFragment());
+//                            break;
+//                        case R.id.place:
+//                            loadFragment(new AddStopsFragment());
+//                            break;
+//
+//                    }
+//                    return true;
+//                }
+//            };
 
-                    switch (menuItem.getItemId()){
-                        case R.id.map:
-                            loadFragment(new AddStopsFragment());
-                            break;
-                        case R.id.place:
-                            loadFragment(new AddStopsFragment());
-                            break;
-
-                    }
-                    return true;
-                }
-            };
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //FirebaseAuth.getInstance().signOut();
+        Log.d("TAG","main_onDestroy");
+    }
 }
