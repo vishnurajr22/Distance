@@ -53,6 +53,7 @@ public class ListViewAdapter extends ArrayAdapter<PlaceModel.Waypoints> {
 
         //listViewItem.setBackground(gd);
         TextView textViewName = (TextView) listViewItem.findViewById(R.id.way_point_item);
+
         CardView card=(CardView)listViewItem.findViewById(R.id.listviewCard) ;
 //        card.setBackground(gd);
 //        card.setRadius(5f);

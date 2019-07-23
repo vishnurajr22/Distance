@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,10 +21,15 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.app.distance.ApiServices.RequestHandler;
 import com.app.distance.CommonDataArea.CommonFunctions;
+import com.app.distance.CommonDataArea.SharedPrefManager;
+import com.app.distance.CommonDataArea.URLs;
+import com.app.distance.Model.User;
 import com.app.distance.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -32,6 +38,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.roger.catloadinglibrary.CatLoadingView;
 import android.content.DialogInterface;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+
 public class LoginActivity extends AppCompatActivity {
     TextView signupTv, signupTv2, signup;
     Button btnLogin;
@@ -70,37 +82,17 @@ public class LoginActivity extends AppCompatActivity {
 
 
         initviews();
-        mAuth = FirebaseAuth.getInstance();
-        mAuthlistner = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (firebaseAuth.getCurrentUser() != null) {
-                    //mView.dismiss();
-                    FirebaseUser user = firebaseAuth.getCurrentUser();
-                    String user_id = user.getUid();
-                    if (user_id != null) {
-                        SharedPreferences sharedpreferences = getSharedPreferences("Settings", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedpreferences.edit();
-                        editor.putString("UserId", user_id);
-                        editor.commit();
-                    }
-                    Log.d("TAG", String.valueOf(firebaseAuth.getCurrentUser().getUid()));
-                   Intent intent= new Intent(LoginActivity.this, MainActivity.class);
-                   if(username.getText().toString()!=null){
-                   intent.putExtra("username",username.getText().toString());}
-                    startActivity(intent);
-                    finish();
-                    login = false;
-                }
-            }
-        };
-
+        /***********************************************************************************/
+        if (SharedPrefManager.getInstance(this).isLoggedIn()) {
+            finish();
+            startActivity(new Intent(this, MainActivity.class));
+            return;
+        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        mAuth.addAuthStateListener(mAuthlistner);
     }
 
     private void initviews() {
@@ -137,21 +129,9 @@ public class LoginActivity extends AppCompatActivity {
 
                 } else {
                     if (validateviews()) {
-                        mView.show(getSupportFragmentManager(), "");
-                        mAuth.signInWithEmailAndPassword(username.getText().toString().trim(), password.getText().toString().trim())
-                                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<AuthResult> task) {
-                                        if (!task.isSuccessful()) {
-                                            Toast.makeText(LoginActivity.this, "Login Problem", Toast.LENGTH_SHORT).show();
+                        //login code goes here
+                        userLogin();
 
-                                        }
-//                                        else{
-//                                            startActivity(new Intent(LoginActivity.this,MainActivity.class));
-//                                            login=false;
-//                                        }
-                                    }
-                                });
                     } else {
                         if (!user) {
                             username.setError("invalid");
@@ -166,6 +146,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 }
             }
+
+
         });
 
         signup.setOnClickListener(new View.OnClickListener() {
@@ -179,6 +161,79 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent, options.toBundle());
             }
         });
+
+    }
+
+    private void userLogin() {
+
+        class UserLogin extends AsyncTask<Void, Void, String> {
+
+            ProgressBar progressBar;
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+//                progressBar = (ProgressBar) findViewById(R.id.progressBar);
+//                progressBar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+//                progressBar.setVisibility(View.GONE);
+
+
+                try {
+                    //converting response to json object
+                    JSONObject obj = new JSONObject(s);
+
+                    //if no error in response
+                    if (!obj.getBoolean("error")) {
+                        Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+
+                        //getting the user from the response
+                        JSONObject userJson = obj.getJSONObject("user");
+
+                        //creating a new user object
+                        User user = new User(
+                                userJson.getInt("id"),
+                                userJson.getString("name"),
+                                userJson.getString("username"),
+                                userJson.getString("pas")
+                        );
+
+                        //storing the user in shared preferences
+                        SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
+
+                        //starting the profile activity
+                        finish();
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Invalid username or password", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            protected String doInBackground(Void... voids) {
+                //creating request handler object
+                RequestHandler requestHandler = new RequestHandler();
+
+                //creating request parameters
+                HashMap<String, String> params = new HashMap<>();
+                params.put("username", username.getText().toString().trim());
+                params.put("password", password.getText().toString().trim());
+
+                //returing the response
+                return requestHandler.sendPostRequest(URLs.URL_LOGIN, params);
+            }
+        }
+
+        UserLogin ul = new UserLogin();
+        ul.execute();
+
     }
 
     public boolean validateviews() {

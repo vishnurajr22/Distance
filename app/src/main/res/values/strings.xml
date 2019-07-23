@@ -4,6 +4,17 @@
     <string name="home">Home</string>
     <string name="signup_text">Welcome back.</string>
     <string name="select_bus">select bus</string>
-
+    <string-array name="shopping_item">
+        <item>Onion</item>
+        <item>Sausage</item>
+        <item>Milk</item>
+        <item>Garlic</item>
+        <item>Beef</item>
+        <item>Veggies</item>
+        <item>Olive</item>
+        <item>Cheese</item>
+        <item>Tuna</item>
+        <item>Mushrooms</item>
+    </string-array>
 
 </resources>

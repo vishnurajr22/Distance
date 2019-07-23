@@ -75,7 +75,8 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.RouteViewHol
         holder.textviewSource.setSelected(true);
         holder.textViewShortDesc.setText(placemodel.getDestination().getDestination());
         holder.textViewShortDesc.setSelected(true);
-        holder.textViewroute.setText(placemodel.getRoute_no());
+        holder.textViewroute.setText(placemodel.getBusString().replace("\"", "").replace("[","").replace("]",""));
+        holder.textViewroute.setSelected(true);
 
 //        for (PlaceModel.Waypoints waypoints : placemodel.getWay_points() ) {
 //

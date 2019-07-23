@@ -159,13 +159,16 @@
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
-                <Spinner
+                <TextView
                     android:background="@drawable/spinner_bg"
-                    android:id="@+id/bus_spinner"
+                    android:id="@+id/mySpinner1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:prompt="@string/select_bus"
                     android:padding="5dp"
+                    android:text="Select Bus"
+                    android:gravity="center"
+                    android:textSize="20sp"
                      />
 
             </LinearLayout>
@@ -189,5 +192,7 @@
         </LinearLayout>
 
     </LinearLayout>
+
+
 
 </RelativeLayout>

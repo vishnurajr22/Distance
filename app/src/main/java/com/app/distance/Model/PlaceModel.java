@@ -6,8 +6,18 @@ public class PlaceModel {
 
 
     private String id;
-    private String route_no;
+    private String busString;
     private String bus_no;
+
+    private List<Bus>bus;
+
+    public List<Bus> getBus() {
+        return bus;
+    }
+
+    public void setBus(List<Bus> bus) {
+        this.bus = bus;
+    }
 
     public String getBus_no() {
         return bus_no;
@@ -48,7 +58,7 @@ public class PlaceModel {
 
     public PlaceModel(String route_no, List<Waypoints> way_points) {
 
-        this.route_no = route_no;
+        this.busString = route_no;
         this.way_points = way_points;
     }
 
@@ -64,17 +74,17 @@ public class PlaceModel {
         this.id = id;
     }
 
-    public String getRoute_no() {
-        return route_no;
+    public String getBusString() {
+        return busString;
     }
 
-    public void setRoute_no(String route_no) {
-        this.route_no = route_no;
+    public void setBusString(String busString) {
+        this.busString = busString;
     }
 
     public PlaceModel(String id, String route_no) {
         this.id = id;
-        this.route_no = route_no;
+        this.busString = route_no;
     }
 
     public class Source{
@@ -182,6 +192,27 @@ public class PlaceModel {
 
         public Waypoints() {
 
+        }
+    }
+    public class Bus{
+        public Bus(){}
+        private int id;
+        private String uuid;
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getUuid() {
+            return uuid;
+        }
+
+        public void setUuid(String uuid) {
+            this.uuid = uuid;
         }
     }
 }

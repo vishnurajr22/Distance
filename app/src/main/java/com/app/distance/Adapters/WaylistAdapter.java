@@ -22,13 +22,13 @@ import androidx.fragment.app.FragmentActivity;
 
 public class WaylistAdapter extends ArrayAdapter<WaypointModel> {
     private AppCompatActivity context;
-    List<WaypointModel> waypoints;
+    public List<WaypointModel> waypoints;
     GradientDrawable color;
     GradientDrawable gd;
-    public WaylistAdapter(FragmentActivity context, List<WaypointModel> artists) {
-        super(context,R.layout.way_item,artists);
+    public WaylistAdapter(FragmentActivity context, List<WaypointModel> way) {
+        super(context,R.layout.way_item,way);
         this.context = (AppCompatActivity) context;
-        this.waypoints = artists;
+        this.waypoints = way;
         this.color=color;
     }
 

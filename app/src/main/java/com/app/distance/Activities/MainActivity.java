@@ -2,6 +2,8 @@ package com.app.distance.Activities;
 
 
 import androidx.annotation.NonNull;
+
+import com.app.distance.CommonDataArea.SharedPrefManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.widget.Toolbar;
@@ -11,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,13 +28,15 @@ import com.google.firebase.auth.FirebaseAuth;
 
 
 public class MainActivity extends AppCompatActivity {
+
     Button placebutton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        String value = getIntent().getExtras().getString("username");
 
+        String uuid= Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        Log.d("uuid",uuid);
         //initViews();
         //starting activity with AddplaceFragment
         loadFragment(new AddStopsFragment());
@@ -45,12 +51,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.logout:
-                FirebaseAuth.getInstance().signOut();
+                SharedPrefManager.getInstance(getApplicationContext()).logout();
                 finish();
-                startActivity(new Intent(MainActivity.this,LoginActivity.class));
+//                startActivity(new Intent(MainActivity.this,LoginActivity.class));
 
         }
         return true;
@@ -63,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void loadFragment(Fragment fragment) {
+    public void loadFragment(Fragment fragment) {
         //selecting fragment
         FragmentManager fm = getSupportFragmentManager();
 

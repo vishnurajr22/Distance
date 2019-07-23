@@ -19,7 +19,7 @@
 
         app:contentPadding="1dp"
         android:layout_margin="5dp"
-        app:cardBackgroundColor="#B0E6E3E3"
+        app:cardBackgroundColor="#CEE6E3E3"
         >
 
         <TextView
@@ -27,7 +27,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fontFamily="@font/cambo"
-            android:gravity="center" />
+            android:gravity="center"
+            />
 
     </androidx.cardview.widget.CardView>
 

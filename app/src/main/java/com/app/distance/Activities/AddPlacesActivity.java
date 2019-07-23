@@ -1,5 +1,7 @@
 package com.app.distance.Activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.provider.Settings;
@@ -7,7 +9,17 @@ import android.provider.Settings;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.app.distance.Adapters.WaylistAdapter;
+import com.app.distance.AddStops.AddStopsFragment;
+import com.app.distance.CommonDataArea.SharedPrefManager;
+import com.app.distance.CommonDataArea.URLs;
+import com.app.distance.Model.User;
 import com.app.distance.Model.WaypointModel;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -18,6 +30,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -49,14 +62,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AddPlacesActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
-    ImageButton source, destination3, waypoints;
+    Button source, destination3, waypoints;
     Button save;
-    TextView sourceText, destinationText;
+
     ListView listView;
     private int SOURCE = 1;
     private int DESTINATION = 2;
@@ -115,16 +130,15 @@ public class AddPlacesActivity extends AppCompatActivity implements GoogleApiCli
     }
 
     private void initviews() {
-        source = (ImageButton) findViewById(R.id.source);
-        destination3 = (ImageButton) findViewById(R.id.dstbtn);
-        waypoints = (ImageButton) findViewById(R.id.waypoints);
-        sourceText = (TextView) findViewById(R.id.sourceT);
-        destinationText = (TextView) findViewById(R.id.destinationT);
+        source = (Button) findViewById(R.id.source);
+        destination3 = (Button) findViewById(R.id.dstbtn);
+        waypoints = (Button) findViewById(R.id.waypoints);
+
         lvWaypoints=(ListView)findViewById(R.id.waylist) ;
 
 
         //container=(LinearLayout)findViewById(R.id.con);
-        route_no = (EditText) findViewById(R.id.route_no);
+       // route_no = (EditText) findViewById(R.id.route_no);
         save=(Button)findViewById(R.id.save);
 
     }
@@ -176,7 +190,19 @@ public class AddPlacesActivity extends AppCompatActivity implements GoogleApiCli
 
                 if(Splace!=null&&Dplace!=null&&Wplace!=null){
                     placeModel.setWay_points(way_list);
-                    toJson(placeModel);}
+                    if(toJson(placeModel)){
+                        Splace=null;
+                        Dplace=null;
+                        Wplace=null;
+                        source.setText("Source");
+                        destination3.setText("Destination");
+                        waypoints.setText("Way Points");
+                        w_List.clear();
+                       finish();
+                    }else{
+                        Toast.makeText(getApplicationContext(),"Something went wrong",Toast.LENGTH_SHORT).show();
+                    }
+                    }
                 else {
                     Toast.makeText(getApplicationContext(),"fill the fields",Toast.LENGTH_SHORT).show();
                 }
@@ -209,7 +235,7 @@ public class AddPlacesActivity extends AppCompatActivity implements GoogleApiCli
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Snackbar.make(sourceText, connectionResult.getErrorMessage() + "", Snackbar.LENGTH_LONG).show();
+        //Snackbar.make(sourceText, connectionResult.getErrorMessage() + "", Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -236,15 +262,15 @@ public class AddPlacesActivity extends AppCompatActivity implements GoogleApiCli
                 if(w_List!=null){
                     w_List.clear();
                 }
-                Splace = String.format("%s", place.getName());
+                Splace = String.format("%s", place.getName()).replace("&","_");
                 Slatitude = String.valueOf(place.getLatLng().latitude);
                 Slongitude = String.valueOf(place.getLatLng().longitude);
-                sourceText.setText(Splace);
-                sourceText.startAnimation(slideDownAnimation);
+                source.setText(Splace);
+                source.startAnimation(slideDownAnimation);
 
                 PlaceModel.Source source = placeModel.new Source();
 
-                source.setSource(String.format("%s", place.getName()));
+                source.setSource(String.format("%s", place.getName()).replace("&","_"));
                 source.setsLattitude(String.valueOf(place.getLatLng().latitude));
                 source.setsLongitude(String.valueOf(place.getLatLng().longitude));
                 placeModel.setSource(source);
@@ -254,11 +280,11 @@ public class AddPlacesActivity extends AppCompatActivity implements GoogleApiCli
 
                 Place place = PlacePicker.getPlace(data, this);
 
-                Dplace = String.format("%s", place.getName());
+                Dplace = String.format("%s", place.getName()).replace("&","_");
                 Dlat = String.valueOf(place.getLatLng().latitude);
                 Dlong = String.valueOf(place.getLatLng().longitude);
-                destinationText.setText(Dplace);
-                destinationText.startAnimation(slideDownAnimation);
+                destination3.setText(Dplace);
+                destination3.startAnimation(slideDownAnimation);
 
                 PlaceModel.Destination destination = placeModel.new Destination();
                 destination.setDestination(Dplace);
@@ -271,10 +297,10 @@ public class AddPlacesActivity extends AppCompatActivity implements GoogleApiCli
 
                 Place place = PlacePicker.getPlace(data, this);
 
-                Wplace = String.format("%s", place.getName());
+                Wplace = String.format("%s", place.getName()).replace("&","_");
                 Wlat = String.valueOf(place.getLatLng().latitude);
                 Wlong = String.valueOf(place.getLatLng().longitude);
-                if (Dplace == null || Splace == null || route_no == null) {
+                if (Dplace == null || Splace == null ) {
                     Toast.makeText(this, "Please select Soure and Destination before selecting Waypoints", Toast.LENGTH_SHORT).show();
                 } else {
                     places = new ArrayList<>();
@@ -282,7 +308,7 @@ public class AddPlacesActivity extends AppCompatActivity implements GoogleApiCli
                     //addPlaces(uuid);
 
 
-                    placeModel.setRoute_no(route_no.getText().toString());
+                    //placeModel.setBusString(route_no.getText().toString());
 
 
                     PlaceModel.Waypoints way = placeModel.new Waypoints();
@@ -314,17 +340,44 @@ public class AddPlacesActivity extends AppCompatActivity implements GoogleApiCli
             }
 
         }
-        WaylistAdapter waylistAdapter=new WaylistAdapter(this, w_List);
+        final WaylistAdapter waylistAdapter=new WaylistAdapter(this, w_List);
+        waylistAdapter.notifyDataSetChanged();
 
         lvWaypoints.setAdapter(waylistAdapter);
+        lvWaypoints.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
+                AlertDialog.Builder adb=new AlertDialog.Builder(AddPlacesActivity.this);
+                adb.setTitle("Delete?");
+                adb.setMessage("Are you sure you want to delete ");
+                final int positionToRemove = position;
+                adb.setNegativeButton("Cancel", null);
+                adb.setPositiveButton("Ok", new AlertDialog.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        waylistAdapter.waypoints.remove(positionToRemove);
+
+                        waylistAdapter.notifyDataSetChanged();
+                    }});
+                adb.show();
+                return false;
+            }
+        });
     }
 
-    public static String toJson(PlaceModel placeModel) {
+    public  Boolean toJson(PlaceModel placeModel) {
 
         try {
             //main leg
             JSONObject jsonObject=new JSONObject();
-            jsonObject.put("Route_no",placeModel.getRoute_no());
+            //jsonObject.put("Route_no",placeModel.getBusString());
+
+            /*JSONObject bus_object=new JSONObject();
+            bus_object.put("uuid","");
+            bus.put(bus_object);
+*/
+
+
+//            bus.put(Integer.parseInt(""),"");
             //source leg
             JSONObject sources=new JSONObject();
             sources.put("Place_Name",placeModel.getSource().getSource());
@@ -351,32 +404,72 @@ public class AddPlacesActivity extends AppCompatActivity implements GoogleApiCli
                 jsonArr.put(wayobject);
             }
             jsonObject.put("Waypoints", jsonArr);
+            JSONArray bus=new JSONArray();
+            jsonObject.put("buses",bus);
             //jsonObject.put("way_points",w);
-           Log.d("TAG",jsonObject.toString());
+           Log.d("json_object",jsonObject.toString());
             //////////////////////////////////////////////////////////////////////
 
                 try {
-                    String id = databaseReference.push().getKey();
+                    post_to_server(jsonObject.toString());
 
-            /*PlaceModel placeModel=new PlaceModel(id,Splace,Slatitude,Slongitude,
-                    Dplace,Dlat,Dlong,Wplace,Wlat,Wlong,uuid);*/
-                    databaseReference.child(id).setValue(String.valueOf(jsonObject));
-//                    Toast.makeText(AddPlacesActivity.this, "Place added", Toast.LENGTH_LONG).show();
                 } catch (Exception e) {
                     Log.e("TAG", e.getMessage());
                 }
 
             //////////////////////////////////////////////////////////////////////
-            way_list.clear();
 
-            return jsonObject.toString();
+
+            return true;
 
         } catch (JSONException e) {
             e.printStackTrace();
+            return false;
         }
 
 
-        return null;
+
+    }
+
+    private void post_to_server(String data) {
+        User user= SharedPrefManager.getInstance(this).getUser();
+
+
+        String URLstring = null;
+        try {
+            URLstring = URLs.INSERT_Places + "&username="+user.getUser_name()+"&place_str="+ URLEncoder.encode(data, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLstring,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("from_server",response.trim());
+                        try {
+                            JSONObject jsonObject=new JSONObject(response);
+                            String res=jsonObject.getString("error");
+                            if(res.equalsIgnoreCase("false")){
+                                Toast.makeText(getApplicationContext(),"Place Added",Toast.LENGTH_SHORT).show();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //displaying the error in toast if occurrs
+
+                    }
+                });
+
+        // request queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        requestQueue.add(stringRequest);
     }
 
     private void loadListview() {

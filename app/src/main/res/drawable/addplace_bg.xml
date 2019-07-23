@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape>
             <gradient
-                android:startColor="#ED040431"
-                android:centerColor="#C1B8D5D5"
-                android:endColor="#D5171B18"
-                android:type="linear"
-                android:angle="90"
-                android:gradientRadius="20dp"/>
+                android:startColor="#0f0c29"
+                android:centerColor="#302b63"
+                android:endColor="#24243e"
 
 
-            <corners
-                android:radius="0dp" />
+                android:angle="45"/>
+
+
             <padding
                 android:left="10dp"
                 android:top="10dp"
@@ -21,3 +20,4 @@
         </shape>
     </item>
 </selector>
+

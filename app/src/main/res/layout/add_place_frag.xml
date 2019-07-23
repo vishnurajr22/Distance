@@ -1,118 +1,134 @@
-<LinearLayout android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:weightSum="5"
-    >
-<LinearLayout
-
-    android:layout_weight="1"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
-    <ImageView
-        android:layout_marginTop="9dp"
-        android:id="@+id/img_view"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:background="@drawable/ic_girl"
-        />
-    <TextView
-        android:id="@+id/user_name1"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:text="User_name"
-        android:layout_marginTop="48dp"/>
-</LinearLayout>
-    <LinearLayout
-        android:layout_weight="1"
-        android:layout_marginTop="5dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:fontFamily="@font/pacifico"
-            android:textSize="20sp"
-            android:layout_marginLeft="9dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-
-            android:text="Routes" />
-    </LinearLayout>
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:background="@drawable/add_places_activity_background">
+
+
+        <RelativeLayout
+            android:id="@+id/rel"
+            android:layout_width="match_parent"
+            android:layout_height="210dp"
+            android:layout_marginLeft="20dp"
             android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <androidx.recyclerview.widget.RecyclerView
-                android:padding="5dp"
-                android:id="@+id/route_list"
-                android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/rectangle"
+            android:elevation="12dp"
+            android:outlineAmbientShadowColor="#000000">
+
+            <ImageView
+                android:id="@+id/profile_image"
                 android:layout_width="match_parent"
-               />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center">
+                android:layout_height="96dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="25dp"
 
-            <com.wang.avi.AVLoadingIndicatorView
+                android:src="@drawable/man" />
 
-                android:id="@+id/avi"
-                style="@style/AVLoadingIndicatorView"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/u_name"
+                android:layout_width="135dp"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
-                app:indicatorColor="#DDF74619"
-                app:indicatorName="LineScaleIndicator" />
-        </LinearLayout>
-    </RelativeLayout>
+                android:layout_above="@+id/user_name1"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="100dp"
+                android:layout_marginEnd="100dp"
+                android:layout_marginBottom="-2dp"
+                android:gravity="center"
+                android:text="NAME"
+                android:textColor="#000000"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/user_name1"
+                android:layout_width="163dp"
+                android:layout_height="29dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="100dp"
+                android:layout_marginEnd="100dp"
+                android:layout_marginBottom="23dp"
+                android:gravity="center"
+                android:text="username"
+                />
 
 
-    <LinearLayout
-        android:layout_marginTop="40dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="bottom"
-        android:orientation="horizontal"
+        </RelativeLayout>
+<TextView
+    android:id="@+id/route_txt"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/rel"
+    android:text="Routes"
+    android:fontFamily="@font/pacifico"
+    android:textColor="#ffffff"
+    android:textSize="20sp"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/route_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
-        android:paddingBottom="20dp"
-        android:weightSum="2">
+            android:layout_below="@+id/route_txt"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginEnd="1dp" />
+
+        <com.wang.avi.AVLoadingIndicatorView
+
+            android:id="@+id/avi1"
+            style="@style/AVLoadingIndicatorView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="159dp"
+            android:layout_marginTop="308dp"
+            android:layout_marginEnd="161dp"
+            android:visibility="visible"
+            app:indicatorColor="#DDF74619"
+            app:indicatorName="LineScaleIndicator" />
 
         <Button
-
             android:id="@+id/addnewstops"
-            android:layout_width="166dp"
-            android:layout_height="137dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
+            android:layout_width="144dp"
+            android:layout_height="79dp"
+            android:layout_below="@+id/route_list"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="23dp"
+            android:layout_marginTop="15dp"
             android:background="@drawable/add_bus_button"
             android:fontFamily="@font/coiny"
-            android:text="Add Route"
-             />
+            android:text="Add Route" />
 
         <Button
             android:id="@+id/addnewbus"
-            android:layout_width="166dp"
-            android:text="Add Bus"
-            android:layout_height="137dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
+            android:layout_width="144dp"
+            android:layout_height="79dp"
+            android:layout_below="@+id/route_list"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="23dp"
             android:background="@drawable/add_route_button"
             android:fontFamily="@font/coiny"
-             />
-    </LinearLayout>
+            android:text="Add Bus" />
 
+
+    </RelativeLayout>
 
 </LinearLayout>
+</ScrollView>
